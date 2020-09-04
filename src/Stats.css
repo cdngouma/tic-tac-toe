@@ -1,0 +1,10 @@
+.Stats {
+   display: flex;
+   justify-content: space-between;
+   color: #e8e8e8;
+   width: 100%;
+}
+
+.score__value {
+   border: 1px solid green;
+}

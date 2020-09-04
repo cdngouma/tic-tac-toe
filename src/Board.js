@@ -2,15 +2,24 @@ import React from 'react';
 import './Board.css';
 
 function Board(props) {
-   const cells = props.grid.map((value, id) => {
+   const cells = props.grid.map((element, id) => {
       let classNames = 'cell';
-      if(value==='O') classNames += ' round-cell used';
-      else if(value==='X') classNames += ' cross-cell used';
+      if (element.val === 'O') {
+         classNames += ' round-cell';
+      } else if (element.val === 'X') {
+         classNames += ' cross-cell';
+      }
+
+      if (element.state === 'used') {
+         classNames += ' used';
+      } else if (element.state === 'winner') {
+         classNames += ' winner breath-fast';
+      }
 
       return (
-         <div id={`cell-${id}`} key={id} disabled={value!==''} value={id}
-            className={ classNames }
-            onClick={ props.setCell }>{ value }</div>
+         <div id={`cell-${id}`} key={id}
+            className={classNames}
+            onClick={props.setCell}>{element.val}</div>
       )
    });
 
