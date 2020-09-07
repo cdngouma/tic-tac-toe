@@ -2,17 +2,22 @@ import React from 'react';
 import './Stats.css';
 
 function ScoreBar(props) {
+   const player = props.player;
+   const cp = props.player==='O' ? 'X':'O';
+
    return (
       <div className='Stats'>
-         <div id="cross-score" className={`score-box ${props.player==='X'?'selected':''}`}
-            onClick={ props.selectPlayer }>
-            <span className="score-symbol">X</span>
-            <span className="score-value">{ props.stats['X'] }</span>
+         <div className="score-box" onClick={ props.selectPlayer }>
+            <span>Player ({ player })</span>
+            <span className="score-value">{ props.stats[player] }</span>
          </div>
-         <div id="round-score" className={`score-box ${props.player==='O'?'selected':''}`}
-            onClick={ props.selectPlayer }>
-            <span className="score-symbol">O</span>
-            <span className="score-value">{ props.stats['O'] }</span>
+         <div className="score-box" onClick={ props.selectPlayer }>
+            <span>Ties</span>
+            <span className="score-value">{ props.stats['ties'] }</span>
+         </div>
+         <div className="score-box">
+            <span>Computer ({ cp })</span>
+            <span className="score-value">{ props.stats[cp] }</span>
          </div>
       </div>
    );

@@ -11,18 +11,36 @@
 
 .App__container {
    display: flex;
+   width: 500px;
    flex-direction: column;
    align-items: center;
 }
 
-#title {
-   color: #e8e8e8;
+#header {
+   display: flex;
+   align-items: center;
+   padding: 15px;
 }
 
 #message {
-   font-size: 14px;
+   width: 212px;
+   font-size: 17px;
    color: #e8e8e8;
-   padding: 15px 0;
+   text-align: center;
+   margin-right: 20px;
+   padding-left: 30px;
+}
+
+.refresh-ico {
+   width: 20px;
+   height: 20px;
+   cursor: pointer;
+   background: url('./icons/refresh.svg');
+   filter: invert(100%) sepia(1%) saturate(870%) hue-rotate(187deg) brightness(113%) contrast(82%);
+}
+
+.refresh-ico:hover {
+   opacity: .7;
 }
 
 .breath-fast {
@@ -56,4 +74,14 @@
 #continue:hover, #reset:hover {
    background-color: #181818;
    border: 1px solid #222;
+}
+
+@media screen and (max-width: 415px) {
+   .App__container {
+      width: 100vw;
+   }
+
+   #continue, #reset {
+      width: 95%;
+   }
 }

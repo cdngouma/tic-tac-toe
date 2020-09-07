@@ -1,12 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
-
 .Board {
-   border: 1px solid #222;
    border-radius: 8px;
    display: grid;
-   grid-template-rows: repeat(3, 100px);
-   grid-template-columns: repeat(3, 100px);
-   gap: 5px;
+   grid-template-rows: repeat(3, 145px);
+   grid-template-columns: repeat(3, 145px);
+   gap: 10px;
    background-color: #111;
    width: 500px;
    padding: 10px 0;
@@ -15,8 +12,8 @@
 
 .cell {
    border-radius: 40%;
-   font-size: 60px;
-   /*font-family: 'Indie Flower', cursive, Tahoma, sans-serif;*/
+   font-size: 85px;
+   font-weight: bold;
    text-align: center;
    vertical-align: middle;
    line-height: 165%;
@@ -24,17 +21,39 @@
    cursor: pointer;
 }
 
-.cell:not(.used):not(.winner):hover {
-   background-color: #181818;
+.dim {
+   opacity: 0.3;
 }
 
 .round-cell {
    background-color: #e8e8e8;
-   color: #111
+   color: #111;
 }
 
 .cross-cell {
    background-color: #111;
    border: 3px solid #e8e8e8;
-   color: #e8e8e8
+   color: #e8e8e8;
+}
+
+@media screen and (max-width: 415px) {
+   .Board {
+      width: 95%;
+      grid-template-rows: repeat(3, 100px);
+      grid-template-columns: repeat(3, 100px);
+   }
+   .cell {
+      font-size: 70px;
+      line-height: 132%;
+   }
+}
+
+@media screen and (max-width: 320px) {
+   .Board {
+      gap: 1px;
+   }
+   .cell {
+      width: 90px;
+      height: 90px;
+   }
 }

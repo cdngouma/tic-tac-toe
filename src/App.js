@@ -19,10 +19,11 @@ function App() {
       setStats({
          'O': 0,
          'X': 0,
+         'ties': 0,
          'round winner': undefined
       });
       setPlayer('X');
-      setTurn('X');
+      setTurn('O');
       setGameState(undefined);
       initBoard();
    }
@@ -53,25 +54,26 @@ function App() {
 
    function checkForWin() {
       let winner = undefined;
+      let highlightedCells = [];
       for (let x = 0; x < SIZE; x++) {
          // Check along rows
          if (grid[x * SIZE].val !== '' && grid[x * SIZE].val === grid[x * SIZE + 1].val && grid[x * SIZE + 1].val === grid[x * SIZE + 2].val) {
-            highlightCells(x * SIZE, x * SIZE + 1, x * SIZE + 2);
+            highlightedCells = [x * SIZE, x * SIZE + 1, x * SIZE + 2];
             winner = grid[x * SIZE].val;
          }
          // Check along columns 
          else if (grid[x].val !== '' && grid[x].val === grid[SIZE + x].val && grid[SIZE + x].val === grid[2 * SIZE + x].val) {
-            highlightCells(x, SIZE + x, 2 * SIZE + x);
+            highlightedCells = [x, SIZE + x, 2 * SIZE + x];
             winner = grid[x].val;
          }
          // Check along diagonal to the bottom right
          else if (grid[0].val !== '' && grid[0].val === grid[SIZE + 1].val && grid[SIZE + 1].val === grid[2 * SIZE + 2].val) {
-            highlightCells(0, SIZE + 1, 2 * SIZE + 2);
+            highlightedCells = [0, SIZE + 1, 2 * SIZE + 2];
             winner = grid[0].val
          }
          // Check along diagonal to the upper right
          else if (grid[2 * SIZE].val !== '' && grid[2 * SIZE].val === grid[SIZE + 1].val && grid[SIZE + 1].val === grid[2].val) {
-            highlightCells(2 * SIZE, SIZE + 1, 2);
+            highlightedCells = [2 * SIZE, SIZE + 1, 2];
             winner = grid[2].val;
          }
       }
@@ -79,21 +81,28 @@ function App() {
       const numUsedCells = grid.reduce((c, o) => c + (o.val === '' ? 0 : 1), 0);
 
       if (winner || numUsedCells === SIZE * SIZE) {
+         let tmp_stats = stats;
          if (winner !== undefined) {
-            let tmp_stats = stats;
             tmp_stats[winner]++;
             tmp_stats['round winner'] = winner;
             setStats(tmp_stats)
+         } else {
+            tmp_stats['ties']++;
+            setStats(tmp_stats);
          }
+         highlightWinner(highlightedCells);
          setGameState('locked');
       }
    }
 
-   function highlightCells(p1, p2, p3) {
+   function highlightWinner(winCells) {
       let tmp_grid = [...grid];
-      tmp_grid[p1].state = 'winner';
-      tmp_grid[p2].state = 'winner';
-      tmp_grid[p3].state = 'winner';
+      for (let x in grid) {
+         tmp_grid[x].class = 'dim';
+      }
+      for (let x of winCells) {
+         tmp_grid[x].class = 'highlight breath-fast';
+      }
       setGrid(tmp_grid);
    }
 
@@ -104,7 +113,7 @@ function App() {
 
    function selectPlayer(event) {
       if (!gameState) {
-         if (event.target.id === "cross-score") setPlayer('X');
+         if (player === "O") setPlayer('X');
          else setPlayer('O');
          setGameState('running');
       }
@@ -118,10 +127,12 @@ function App() {
       }
    }
 
-   //const message = "Start game or select player";
    let message = "Start game or select player";
-   if (stats['round winner']) {
+   if (stats['round winner'] && gameState==='locked') {
       message = stats['round winner'] + " won!";
+   } else if (gameState==='locked'){
+      console.log('Drew');
+      message = 'Draw!';
    } else if (gameState) {
       message = turn + " turn";
    }
@@ -130,13 +141,16 @@ function App() {
       <div className="App">
          {/* <h1 id="title">TicTacToe</h1> */}
          <div className="App__container">
-            <Stats stats={stats} player={player}
-               selectPlayer={selectPlayer} />
-            <div id="message">{message}</div>
-            <Board grid={grid}
-               setCell={setCell}
-               startNextRound={startNextRound} />
-            <button id="reset" onClick={startNewGame}>Reset Game</button>
+            <div id="header">
+               <div id="message">{message}</div>
+               <div title="Restart Game" className="refresh-ico" onClick={ startNewGame }></div>
+            </div>
+            <Board grid={ grid }
+               setCell={ setCell }
+               startNextRound={ startNextRound } />
+            <Stats stats={ stats }
+               player={ player }
+               selectPlayer={ selectPlayer } />
          </div>
       </div>
    );
