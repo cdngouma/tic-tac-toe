@@ -24,7 +24,7 @@ function Board(props) {
    });
 
    return (
-      <div className='Board'>{cells}</div>
+      <div className='Board' onClick={ props.startNextRound }>{cells}</div>
    );
 }
 
