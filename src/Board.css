@@ -39,21 +39,39 @@
 @media screen and (max-width: 415px) {
    .Board {
       width: 95%;
-      grid-template-rows: repeat(3, 100px);
-      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 115px);
+      grid-template-columns: repeat(3, 115px);
+   }
+   .cell {
+      line-height: 130%;
+   }
+}
+
+@media screen and (max-width: 376px) {
+   .Board {
+      grid-template-rows: repeat(3, 105px);
+      grid-template-columns: repeat(3, 105px);
    }
    .cell {
       font-size: 70px;
-      line-height: 132%;
+      line-height: 135%;
+   }
+}
+
+@media screen and (max-width: 360px) {
+   .Board {
+      grid-template-rows: repeat(3, 100px);
+      grid-template-columns: repeat(3, 100px);
    }
 }
 
 @media screen and (max-width: 320px) {
    .Board {
-      gap: 1px;
+      grid-template-rows: repeat(3, 90px);
+      grid-template-columns: repeat(3, 90px);
+      gap: 7px;
    }
    .cell {
-      width: 90px;
-      height: 90px;
+      line-height: 120%;
    }
 }

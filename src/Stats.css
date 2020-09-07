@@ -13,9 +13,13 @@
    flex-direction: column;
    align-items: center;
    justify-content: center;
-   font-size: 17px;
    text-transform: uppercase;
    cursor: pointer;
+   text-align: center ;
+}
+
+.score-label {
+   font-size: 17px;
 }
 
 .score-value {
@@ -26,14 +30,17 @@
    .Stats {
       width: 95%;
    }
-   .score-box {
-      font-size: 13px;
+   .score-label {
+      font-size: 13.3px;
    }
 }
 
 @media screen and (max-width: 320px) {
    .Stats {
-      width: 90%;
-      justify-content: space-between;
+      width: 100%;
+      justify-content: space-evenly;
+   }
+   .score-label {
+      font-size: 12.27px;
    }
 }

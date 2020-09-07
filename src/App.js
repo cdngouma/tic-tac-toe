@@ -23,7 +23,7 @@ function App() {
          'round winner': undefined
       });
       setPlayer('X');
-      setTurn('O');
+      setTurn('X');
       setGameState(undefined);
       initBoard();
    }
@@ -49,33 +49,40 @@ function App() {
       tmp_grid[position].state = 'used';
       setGrid(tmp_grid);
       checkForWin();
-      toggleTurn();
+      toggleTurn();;
+      getAIMoves()
+   }
+
+   function getAIMoves() {
+      
    }
 
    function checkForWin() {
       let winner = undefined;
       let highlightedCells = [];
-      for (let x = 0; x < SIZE; x++) {
-         // Check along rows
-         if (grid[x * SIZE].val !== '' && grid[x * SIZE].val === grid[x * SIZE + 1].val && grid[x * SIZE + 1].val === grid[x * SIZE + 2].val) {
+      // Check for rows
+      for (let x=0; x<SIZE; x++) {
+         if (winner) break;
+         if (grid[x * SIZE].val === grid[x * SIZE + 1].val && grid[x * SIZE + 1].val === grid[x * SIZE + 2].val) {
             highlightedCells = [x * SIZE, x * SIZE + 1, x * SIZE + 2];
             winner = grid[x * SIZE].val;
          }
-         // Check along columns 
-         else if (grid[x].val !== '' && grid[x].val === grid[SIZE + x].val && grid[SIZE + x].val === grid[2 * SIZE + x].val) {
+      }
+      // Check for columns
+      for (let x = 0; x < SIZE; x++) {
+         if (winner) break;
+         if (grid[x].val === grid[SIZE + x].val && grid[SIZE + x].val === grid[2 * SIZE + x].val) {
             highlightedCells = [x, SIZE + x, 2 * SIZE + x];
             winner = grid[x].val;
          }
-         // Check along diagonal to the bottom right
-         else if (grid[0].val !== '' && grid[0].val === grid[SIZE + 1].val && grid[SIZE + 1].val === grid[2 * SIZE + 2].val) {
-            highlightedCells = [0, SIZE + 1, 2 * SIZE + 2];
-            winner = grid[0].val
-         }
-         // Check along diagonal to the upper right
-         else if (grid[2 * SIZE].val !== '' && grid[2 * SIZE].val === grid[SIZE + 1].val && grid[SIZE + 1].val === grid[2].val) {
-            highlightedCells = [2 * SIZE, SIZE + 1, 2];
-            winner = grid[2].val;
-         }
+      }
+      // Check diagonals
+      if (grid[0].val === grid[SIZE + 1].val && grid[SIZE + 1].val === grid[2 * SIZE + 2].val) {
+         highlightedCells = [0, SIZE + 1, 2 * SIZE + 2];
+         winner = grid[0].val
+      } else if (grid[2 * SIZE].val === grid[SIZE + 1].val && grid[SIZE + 1].val === grid[2].val) {
+         highlightedCells = [2 * SIZE, SIZE + 1, 2];
+         winner = grid[2].val;
       }
 
       const numUsedCells = grid.reduce((c, o) => c + (o.val === '' ? 0 : 1), 0);
@@ -131,7 +138,6 @@ function App() {
    if (stats['round winner'] && gameState==='locked') {
       message = stats['round winner'] + " won!";
    } else if (gameState==='locked'){
-      console.log('Drew');
       message = 'Draw!';
    } else if (gameState) {
       message = turn + " turn";

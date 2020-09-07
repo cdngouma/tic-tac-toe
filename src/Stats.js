@@ -8,15 +8,15 @@ function ScoreBar(props) {
    return (
       <div className='Stats'>
          <div className="score-box" onClick={ props.selectPlayer }>
-            <span>Player ({ player })</span>
+            <span className="score-label">Player ({ player })</span>
             <span className="score-value">{ props.stats[player] }</span>
          </div>
          <div className="score-box" onClick={ props.selectPlayer }>
-            <span>Ties</span>
+            <span className="score-label">Ties</span>
             <span className="score-value">{ props.stats['ties'] }</span>
          </div>
          <div className="score-box">
-            <span>Computer ({ cp })</span>
+            <span className="score-label">Computer ({ cp })</span>
             <span className="score-value">{ props.stats[cp] }</span>
          </div>
       </div>
