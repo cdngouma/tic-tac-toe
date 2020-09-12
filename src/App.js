@@ -1,162 +1,178 @@
 import React from 'react';
 import './App.css';
 
+import Header from './Header';
 import Board from './Board';
 import Stats from './Stats';
 
-const SIZE = 3;
+import aiMove from './ai_script';
 
 function App() {
-   const [player, setPlayer] = React.useState(undefined);
-   const [turn, setTurn] = React.useState(undefined);
-   const [grid, setGrid] = React.useState([{}]);
+   const [board, setBoard] = React.useState([]);
+   const [players, setPlayers] = React.useState({});
    const [stats, setStats] = React.useState({});
-   const [gameState, setGameState] = React.useState(undefined);
+   const [turn, setTurn] = React.useState('');
 
    React.useEffect(startNewGame, []);
+   React.useEffect(placeAIMove);
 
    function startNewGame() {
-      setStats({
-         'O': 0,
-         'X': 0,
-         'ties': 0,
-         'round winner': undefined
+      setPlayers({
+         human: 'o',
+         ai: 'x'
       });
-      setPlayer('X');
-      setTurn('X');
-      setGameState(undefined);
-      initBoard();
+      setStats({
+         'x': 0,
+         'o': 0,
+         'ties': 0,
+         'winner': undefined,
+         'starter': 'x'
+      });
+      setTurn('x');
+      resetBoard();
    }
 
-   function initBoard() {
-      let tmp_grid = [];
-      for (let i = 0; i < SIZE * SIZE; i++) {
-         tmp_grid.push({ val: '', state: 'open' });
-      }
-      setGrid(tmp_grid);
+   function resetBoard() {
+      let tmp_board = [
+         ['_', '_', '_'],
+         ['_', '_', '_'],
+         ['_', '_', '_']
+      ];
+      setBoard(tmp_board);
    }
 
-   function setCell(event) {
-      if (gameState === 'locked' || event.target.textContent !== '') {
-         return;
-      }
-      if (gameState === undefined) {
-         setGameState('running');
-      }
-      const position = event.target.id.slice(-1);
-      let tmp_grid = [...grid];
-      tmp_grid[position].val = turn;
-      tmp_grid[position].state = 'used';
-      setGrid(tmp_grid);
-      checkForWin();
-      toggleTurn();;
-      getAIMoves()
-   }
-
-   function getAIMoves() {
-      
-   }
-
-   function checkForWin() {
-      let winner = undefined;
-      let highlightedCells = [];
-      // Check for rows
-      for (let x=0; x<SIZE; x++) {
-         if (winner) break;
-         if (grid[x * SIZE].val === grid[x * SIZE + 1].val && grid[x * SIZE + 1].val === grid[x * SIZE + 2].val) {
-            highlightedCells = [x * SIZE, x * SIZE + 1, x * SIZE + 2];
-            winner = grid[x * SIZE].val;
-         }
-      }
-      // Check for columns
-      for (let x = 0; x < SIZE; x++) {
-         if (winner) break;
-         if (grid[x].val === grid[SIZE + x].val && grid[SIZE + x].val === grid[2 * SIZE + x].val) {
-            highlightedCells = [x, SIZE + x, 2 * SIZE + x];
-            winner = grid[x].val;
-         }
-      }
-      // Check diagonals
-      if (grid[0].val === grid[SIZE + 1].val && grid[SIZE + 1].val === grid[2 * SIZE + 2].val) {
-         highlightedCells = [0, SIZE + 1, 2 * SIZE + 2];
-         winner = grid[0].val
-      } else if (grid[2 * SIZE].val === grid[SIZE + 1].val && grid[SIZE + 1].val === grid[2].val) {
-         highlightedCells = [2 * SIZE, SIZE + 1, 2];
-         winner = grid[2].val;
-      }
-
-      const numUsedCells = grid.reduce((c, o) => c + (o.val === '' ? 0 : 1), 0);
-
-      if (winner || numUsedCells === SIZE * SIZE) {
+   function startNextRound() {
+      if (stats.winner) {
          let tmp_stats = stats;
-         if (winner !== undefined) {
-            tmp_stats[winner]++;
-            tmp_stats['round winner'] = winner;
-            setStats(tmp_stats)
-         } else {
-            tmp_stats['ties']++;
-            setStats(tmp_stats);
+         const starter = tmp_stats.starter === 'o' ? 'x' : 'o';
+         tmp_stats.winner = undefined;
+         tmp_stats.starter = starter;
+         setTurn(starter);
+         resetBoard();
+      }
+   }
+
+   function changePlayer() {
+      /*const ai = players.human;
+      const human = players.ai;
+      setPlayers({ human: human, ai: ai });
+      */
+   }
+
+   function placePlayerMove(event) {
+      if (stats['winner'] === undefined && turn === players.human) {
+         const pos = event.target.id.slice(-1);
+         const i = Math.floor(pos / 3);
+         const j = pos % 3;
+         let tmp_board = [...board];
+         tmp_board[i][j] = players.human;
+         setBoard(tmp_board);
+         const winner = checkWinner();
+         if (winner) {
+            setWinner(winner);
          }
-         highlightWinner(highlightedCells);
-         setGameState('locked');
+         setTurn(players.ai);
       }
    }
 
-   function highlightWinner(winCells) {
-      let tmp_grid = [...grid];
-      for (let x in grid) {
-         tmp_grid[x].class = 'dim';
-      }
-      for (let x of winCells) {
-         tmp_grid[x].class = 'highlight breath-fast';
-      }
-      setGrid(tmp_grid);
-   }
-
-   function toggleTurn() {
-      if (turn === 'O') setTurn('X');
-      else if (turn === 'X') setTurn('O');
-   }
-
-   function selectPlayer(event) {
-      if (!gameState) {
-         if (player === "O") setPlayer('X');
-         else setPlayer('O');
-         setGameState('running');
+   function placeAIMove() {
+      if (stats['winner'] === undefined && turn === players.ai) {
+         let i = 0;
+         let j = 0;
+         let tmp_board = [...board];
+         tmp_board[i][j] = players.ai;
+         setBoard(tmp_board);
+         const winner = checkWinner();
+         if (winner) {
+            setWinner(winner);
+         }
+         setTurn(players.human);
       }
    }
 
-   function startNextRound(event) {
-      if (gameState === 'locked') {
-         stats['round winner'] = undefined;
-         setGameState('running');
-         initBoard();
-      }
+   function setWinner(winner) {
+      let tmp_stats = stats;
+      stats[winner]++;
+      stats['winner'] = winner;
+      setStats(tmp_stats);
    }
 
-   let message = "Start game or select player";
-   if (stats['round winner'] && gameState==='locked') {
-      message = stats['round winner'] + " won!";
-   } else if (gameState==='locked'){
-      message = 'Draw!';
-   } else if (gameState) {
-      message = turn + " turn";
+   function checkWinner() {
+      // Check ny rows
+      for (let i = 0; i < 3; i++) {
+         if (board[i][0] !== '_' && board[i][0] === board[i][1] && board[i][1] === board[i][2]) {
+            //setWinnerIndexes(new Set([i, 3 * i + 1, 3 * i + 2]));
+            return board[i][0];
+         }
+      }
+      // Check by columns
+      for (let i = 0; i < 3; i++) {
+         if (board[0][i] !== '_' && board[0][i] === board[1][i] && board[1][i] === board[2][i]) {
+            //setWinnerIndexes(new Set([i, i + 3, 6 + i]));
+            return board[0][i];
+         }
+      }
+      // Check by diagonals
+      if (board[0][0] !== '_' && board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
+         //setWinnerIndexes(new Set([0, 5, 8]));
+         return board[0][0];
+      }
+      if (board[2][0] !== '_' && board[2][0] === board[1][1] && board[1][1] === board[0][2]) {
+         //setWinnerIndexes(new Set([6, 5, 2]));
+         return board[2][0];
+      }
+
+      let numOpenCells = 0;
+      for (let i = 0; i < 3; i++) {
+         for (let j = 0; j < 3; j++) {
+            if (board[i][j] === '_') {
+               numOpenCells++;
+            }
+         }
+      }
+      if (numOpenCells === 0) {
+         return 'ties';
+      }
+      return undefined;
    }
+
+   const boardElements = board.map((row, i) => {
+      return row.map((value, j) => {
+         const id = i * 3 + j;
+         let classNames = ['cell'];
+         if (value === '_') {
+            value = '';
+         } else if (value[value.length - 1] === '*') {
+            value = value[0];
+            classNames.push(["highlight"]);
+         }
+
+         if (value[0] === 'o' || value[0] === 'x') {
+            classNames.push([`${value[0]}-cell`]);
+         }
+
+         return (<div key={id}
+            id={"cell-" + id}
+            className={classNames.join(" ")}
+            onClick={placePlayerMove}>{value}</div>)
+      });
+   });
+
+   const message = (!stats.winner ? turn.toUpperCase() + " turn" : (
+      stats.winner !== 'ties' ? stats.winner.toUpperCase() + " won!" : "Draw!"
+   ))
 
    return (
       <div className="App">
-         {/* <h1 id="title">TicTacToe</h1> */}
          <div className="App__container">
-            <div id="header">
-               <div id="message">{message}</div>
-               <div title="Restart Game" className="refresh-ico" onClick={ startNewGame }></div>
-            </div>
-            <Board grid={ grid }
-               setCell={ setCell }
-               startNextRound={ startNextRound } />
-            <Stats stats={ stats }
-               player={ player }
-               selectPlayer={ selectPlayer } />
+            <Header newGame={startNewGame}
+               nextRound={startNextRound}
+               message={message}
+               continue={stats.winner === undefined} />
+            <Board boardElements={boardElements} />
+            <Stats players={players}
+               stats={stats}
+               changePlayer={changePlayer} />
          </div>
       </div>
    );

@@ -1,0 +1,43 @@
+.Header {
+   width: 100%;
+   display: flex;
+   align-items: center;
+   font-size: 17px;
+   padding: 15px;
+}
+
+#message {
+   color: #e8e8e8;
+   text-align: center;
+   margin-left: auto;
+   margin-right: auto;
+}
+
+#continue {
+   border: none;
+   background-color: unset;
+   font-size: inherit;
+   font-family: inherit;
+   text-align: center;
+   color: #e8e8e8;
+   cursor: pointer;
+}
+
+#continue:disabled {
+   opacity: .3;
+}
+
+.refresh-ico {
+   width: 20px;
+   height: 20px;
+   margin: 0 32.5px;
+   cursor: pointer;
+   background: url('./icons/refresh.svg');
+   background-repeat: no-repeat;
+   background-position-x: center;
+   filter: invert(100%) sepia(1%) saturate(870%) hue-rotate(187deg) brightness(113%) contrast(82%);
+}
+
+.refresh-ico:hover {
+   opacity: .7;
+}

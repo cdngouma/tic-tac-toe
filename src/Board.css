@@ -1,12 +1,10 @@
 .Board {
-   border-radius: 8px;
    display: grid;
    grid-template-rows: repeat(3, 145px);
    grid-template-columns: repeat(3, 145px);
    gap: 10px;
    background-color: #111;
-   width: 500px;
-   padding: 10px 0;
+   padding: 10px;
    justify-content: center;
 }
 
@@ -15,6 +13,7 @@
    font-size: 85px;
    font-weight: bold;
    text-align: center;
+   text-transform: uppercase;
    vertical-align: middle;
    line-height: 165%;
    border: 3px solid #222;
@@ -25,20 +24,32 @@
    opacity: 0.3;
 }
 
-.round-cell {
+.o-cell {
    background-color: #e8e8e8;
    color: #111;
 }
 
-.cross-cell {
+.x-cell {
    background-color: #111;
    border: 3px solid #e8e8e8;
    color: #e8e8e8;
 }
 
+.breath-fast {
+   animation-name: breath;
+   animation-timing-function: linear;
+   animation-iteration-count: 2;
+   animation-duration: .3s;
+}
+
+@keyframes breath {
+   0%   { transform: scale(1,1) translateY(0); }
+   50%  { transform: scale(.85,.85) translateY(0); }
+   100% { transform: scale(1,1) translateY(0); }
+}
+
 @media screen and (max-width: 415px) {
    .Board {
-      width: 95%;
       grid-template-rows: repeat(3, 115px);
       grid-template-columns: repeat(3, 115px);
    }

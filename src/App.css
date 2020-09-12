@@ -5,84 +5,19 @@
    flex-direction: column;
    align-items: center;
    background-color: #111;
-   box-sizing: border-box;
 }
 
 .App__container {
+   margin-top: 8%;
+   padding: 10px;
    display: flex;
-   width: 500px;
-   margin-top: 10vh;
    flex-direction: column;
    align-items: center;
-}
-
-#header {
-   display: flex;
-   align-items: center;
-   padding: 15px;
-}
-
-#message {
-   width: 212px;
-   font-size: 17px;
-   color: #e8e8e8;
-   text-align: center;
-   margin-right: 20px;
-   padding-left: 30px;
-}
-
-.refresh-ico {
-   width: 20px;
-   height: 20px;
-   cursor: pointer;
-   background: url('./icons/refresh.svg');
-   filter: invert(100%) sepia(1%) saturate(870%) hue-rotate(187deg) brightness(113%) contrast(82%);
-}
-
-.refresh-ico:hover {
-   opacity: .7;
-}
-
-.breath-fast {
-   animation-name: breath;
-   animation-timing-function: linear;
-   animation-iteration-count: 2;
-   animation-duration: .3s;
-}
-
-@keyframes breath {
-   0%   { transform: scale(1,1) translateY(0); }
-   50%  { transform: scale(.85,.85) translateY(0); }
-   100% { transform: scale(1,1) translateY(0); }
-}
-
-#continue, #reset {
-   width: 100%;
-   height: 48px;
-   padding: 7px;
-   margin-top: 5px;
-   font-size: 14px;
-   font-weight: bold;
-   background-color: #222;
-   color: #e8e8e8;
-   border: none;
-   text-decoration: none;
-   text-transform: uppercase;
-   cursor: pointer;
-}
-
-#continue:hover, #reset:hover {
-   background-color: #181818;
-   border: 1px solid #222;
 }
 
 @media screen and (max-width: 415px) {
    .App__container {
       width: 100vw;
-   }
-
-   #continue, #reset {
-      width: 95%;
    }
 }
 

@@ -1,21 +1,21 @@
 .Stats {
    display: flex;
-   justify-content: space-evenly;
+   justify-content: space-between;
+   align-items: center;
    color: #e8e8e8;
-   width: 100%;
+   width: 90%;
    margin-top: 20px;
+   padding: 0 10px;
 }
 
 .score-box {
-   width: 180px;
-   padding: 0 10px;
    display: flex;
    flex-direction: column;
    align-items: center;
    justify-content: center;
    text-transform: uppercase;
    cursor: pointer;
-   text-align: center ;
+   text-align: center;
 }
 
 .score-label {
