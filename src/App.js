@@ -77,8 +77,7 @@ function App() {
 
    function placeAIMove() {
       if (stats['winner'] === undefined && turn === players.ai) {
-         let i = 0;
-         let j = 0;
+         let { i, j } = aiMove([...board], players);
          let tmp_board = [...board];
          tmp_board[i][j] = players.ai;
          setBoard(tmp_board);
