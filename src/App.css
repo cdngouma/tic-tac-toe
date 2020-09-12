@@ -8,7 +8,7 @@
 }
 
 .App__container {
-   margin-top: 8%;
+   margin-top: 8vh;
    padding: 10px;
    display: flex;
    flex-direction: column;

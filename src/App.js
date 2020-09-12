@@ -96,29 +96,42 @@ function App() {
       setStats(tmp_stats);
    }
 
+   function highlightCells(cells) {
+      console.log("hi", cells);
+      let tmp_board = [...board];
+      for(let x of cells) {
+         let i = x[0];
+         let j = x[1];
+         console.log(">>", x, i, j);
+         let value = tmp_board[i][j];
+         tmp_board[i][j] = value+"*";
+      }
+      setBoard(board);
+   }
+
    function checkWinner() {
       // Check ny rows
       for (let i = 0; i < 3; i++) {
          if (board[i][0] !== '_' && board[i][0] === board[i][1] && board[i][1] === board[i][2]) {
-            //setWinnerIndexes(new Set([i, 3 * i + 1, 3 * i + 2]));
-            return board[i][0];
+            highlightCells([[i,0],[i,1],[i,2]]);
+            return board[i][0][0];
          }
       }
       // Check by columns
       for (let i = 0; i < 3; i++) {
          if (board[0][i] !== '_' && board[0][i] === board[1][i] && board[1][i] === board[2][i]) {
-            //setWinnerIndexes(new Set([i, i + 3, 6 + i]));
-            return board[0][i];
+            highlightCells([[0,i],[1,i],[2,i]]);
+            return board[0][i][0];
          }
       }
       // Check by diagonals
       if (board[0][0] !== '_' && board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
-         //setWinnerIndexes(new Set([0, 5, 8]));
-         return board[0][0];
+         highlightCells([[0,0],[1,1],[2,2]]);
+         return board[0][0][0];
       }
       if (board[2][0] !== '_' && board[2][0] === board[1][1] && board[1][1] === board[0][2]) {
-         //setWinnerIndexes(new Set([6, 5, 2]));
-         return board[2][0];
+         highlightCells([[2,0],[1,1],[0,2]]);
+         return board[2][0][0];
       }
 
       let numOpenCells = 0;
@@ -134,7 +147,7 @@ function App() {
       }
       return undefined;
    }
-
+   console.log(board);
    const boardElements = board.map((row, i) => {
       return row.map((value, j) => {
          const id = i * 3 + j;
@@ -143,11 +156,13 @@ function App() {
             value = '';
          } else if (value[value.length - 1] === '*') {
             value = value[0];
-            classNames.push(["highlight"]);
+            classNames.push("highlight", "animate-1");
+         } else if(stats.winner !== undefined) {
+            classNames.push("dim");
          }
 
          if (value[0] === 'o' || value[0] === 'x') {
-            classNames.push([`${value[0]}-cell`]);
+            classNames.push(`${value[0]}-cell`);
          }
 
          return (<div key={id}
